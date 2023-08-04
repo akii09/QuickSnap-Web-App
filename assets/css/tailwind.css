@@ -1,0 +1,10 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+/* Your additional styles here */
+body {
+    background-color: #1E1E1E;
+}
+.bg-qs-color{
+    background-color: #80B4FB;
+}
