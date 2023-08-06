@@ -15,14 +15,12 @@ export default {
       all_images: [],
       show_image: false,
       is_loading: false,
+      is_loading2: true,
       imageDeleteHash: null
     }
   },
   created() {
     this.authenticateUser();
-  },
-  mounted() {
-    this.images.map((e) => this.all_images.push(e.link))
   },
   methods: {
     authenticateUser() {
@@ -56,6 +54,7 @@ export default {
             })
               .then(response => {
                 this.images = response.data.data;
+                this.images.map((e) => this.all_images.push(e.link))
                 this.show_dashboard = true;
                 this.is_loading = false;
                 console.log(response.data); // Do something with the response data
@@ -71,19 +70,18 @@ export default {
     },
     deleteImage(imageHash) {
       ElMessageBox.alert(
-        'Are you sure you want to 🗑️ delete this image permanently?',
+        '🗑️ Image delete options are not available from here for now. You are unable to delete this image at the moment. However, in the future, you can delete your images by clicking the delete button. The delete button will be available right next to the copy button after uploading the image.',
         'Delete Image',
         {
           // if you want to disable its autofocus
           // autofocus: false,
-          confirmButtonText: 'Yes, delete it!',
-          showCancelButton: true,
-          cancelButtonText: 'Cancel',
+          confirmButtonText: 'Got it!',
+          showCancelButton: false,
           type: 'warning',
           customClass: 'qs-dark-theme',
           callback: (action) => {
             if (action === 'confirm') {
-              this.getImageDetails(imageHash);
+              // this.getImageDetails(imageHash);
               // Perform your deletion logic here
             } else {
               ElMessage({
@@ -156,11 +154,9 @@ export default {
       document.execCommand('copy');
       document.body.removeChild(textarea);
 
-      ElNotification({
-        title: 'Success',
-        message: 'Image link copied successfully',
+      ElMessage({
         type: 'success',
-        customClass: 'qs-dark-theme'
+        message: 'Image link copied successfully. 🥳',
       });
     },
     // data": {
@@ -173,7 +169,7 @@ export default {
 
 <template>
   <Header />
-  <div class="container mx-auto">
+  <div class="container mx-auto min-h-screen">
     <div v-if="show_dashboard" class="px-4 py-6">
       <div v-loading="is_loading" class="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 ">
         <template v-if="images.length">
@@ -186,12 +182,7 @@ export default {
             @click="openImage(image.link)"> -->
             <div class="text-xl font-semibold mb-2">{{ image.name }}</div>
             <div class="flex justify-end py-2 px-1">
-              <svg @click="copyImgLink(image.link)" viewBox="0 0 1024 1024" class="cursor-pointer mx-1"
-                style="width: 25px; color: #a09f9f;" xmlns="http://www.w3.org/2000/svg" data-v-ea893728="">
-                <path fill="currentColor"
-                  d="M715.648 625.152 670.4 579.904l90.496-90.56c75.008-74.944 85.12-186.368 22.656-248.896-62.528-62.464-173.952-52.352-248.96 22.656L444.16 353.6l-45.248-45.248 90.496-90.496c100.032-99.968 251.968-110.08 339.456-22.656 87.488 87.488 77.312 239.424-22.656 339.456l-90.496 90.496zm-90.496 90.496-90.496 90.496C434.624 906.112 282.688 916.224 195.2 828.8c-87.488-87.488-77.312-239.424 22.656-339.456l90.496-90.496 45.248 45.248-90.496 90.56c-75.008 74.944-85.12 186.368-22.656 248.896 62.528 62.464 173.952 52.352 248.96-22.656l90.496-90.496 45.248 45.248zm0-362.048 45.248 45.248L398.848 670.4 353.6 625.152 625.152 353.6z">
-                </path>
-              </svg>
+
               <!-- <svg viewBox="0 0 1024 1024" class="cursor-pointer mx-1" style="width: 25px; color: #ec5e5e;" xmlns="http://www.w3.org/2000/svg" data-v-ea893728=""><path fill="currentColor" d="M512 160c320 0 512 352 512 352S832 864 512 864 0 512 0 512s192-352 512-352zm0 64c-225.28 0-384.128 208.064-436.8 288 52.608 79.872 211.456 288 436.8 288 225.28 0 384.128-208.064 436.8-288-52.608-79.872-211.456-288-436.8-288zm0 64a224 224 0 1 1 0 448 224 224 0 0 1 0-448zm0 64a160.192 160.192 0 0 0-160 160c0 88.192 71.744 160 160 160s160-71.808 160-160-71.744-160-160-160z"></path></svg> -->
               <!-- <svg viewBox="0 0 1024 1024" class="cursor-pointer mx-1" style="width: 25px; color: #a09f9f;"
               xmlns="http://www.w3.org/2000/svg" data-v-ea893728="">
@@ -202,7 +193,7 @@ export default {
                 d="m469.952 554.24 52.8-7.552L847.104 222.4a32 32 0 1 0-45.248-45.248L477.44 501.44l-7.552 52.8zm422.4-422.4a96 96 0 0 1 0 135.808l-331.84 331.84a32 32 0 0 1-18.112 9.088L436.8 623.68a32 32 0 0 1-36.224-36.224l15.104-105.6a32 32 0 0 1 9.024-18.112l331.904-331.84a96 96 0 0 1 135.744 0z">
               </path>
             </svg> -->
-              <span>
+              <span class="flex items-center">
                 <svg viewBox="0 0 1024 1024" class="cursor-pointer mx-1" style="width: 25px; color: #a09f9f;"
                   xmlns="http://www.w3.org/2000/svg" data-v-ea893728="">
                   <path fill="currentColor"
@@ -211,6 +202,13 @@ export default {
                 </svg>
                 <span class="font-sm mr-1" style="color: #a09f9f;">{{ image.views }}</span>
               </span>
+
+              <svg @click="copyImgLink(image.link)" viewBox="0 0 1024 1024" class="cursor-pointer mx-1"
+                style="width: 25px; color: #a09f9f;" xmlns="http://www.w3.org/2000/svg" data-v-ea893728="">
+                <path fill="currentColor"
+                  d="M715.648 625.152 670.4 579.904l90.496-90.56c75.008-74.944 85.12-186.368 22.656-248.896-62.528-62.464-173.952-52.352-248.96 22.656L444.16 353.6l-45.248-45.248 90.496-90.496c100.032-99.968 251.968-110.08 339.456-22.656 87.488 87.488 77.312 239.424-22.656 339.456l-90.496 90.496zm-90.496 90.496-90.496 90.496C434.624 906.112 282.688 916.224 195.2 828.8c-87.488-87.488-77.312-239.424 22.656-339.456l90.496-90.496 45.248 45.248-90.496 90.56c-75.008 74.944-85.12 186.368-22.656 248.896 62.528 62.464 173.952 52.352 248.96-22.656l90.496-90.496 45.248 45.248zm0-362.048 45.248 45.248L398.848 670.4 353.6 625.152 625.152 353.6z">
+                </path>
+              </svg>
 
               <svg @click="deleteImage(image.id)" class="cursor-pointer mx-1" style="width: 25px; color: #d87c7c;"
                 viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" data-v-ea893728="">
@@ -222,7 +220,7 @@ export default {
             <!-- <button @click="deleteImage(image.id)" class="bg-qs-color text-white px-4 py-2 rounded-lg">Delete</button> -->
           </div>
         </template>
-        <template v-else>
+        <template v-else-if="!images.length && !is_loading">
           <div>
             <p class="text-center text-white text-lg mt-96">
               Images not found...
@@ -271,4 +269,9 @@ export default {
 
 .qs-dark-theme .el-dialog__title {
   color: #fff !important;
-}</style>
+}
+
+.el-loading-mask {
+  background: transparent;
+}
+</style>

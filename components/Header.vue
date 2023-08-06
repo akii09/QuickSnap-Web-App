@@ -6,6 +6,11 @@ export default {
             show_credit: false
         }
     },
+    computed:{
+        is_logged_in(){
+            return nuxtStorage.localStorage.getData('qs_token');
+        }
+    },
     methods: {
         handleClose() {
             this.show_credit = false;
@@ -39,7 +44,8 @@ export default {
                 <h1 class="text-white ml-2 font-semibold"> QuickSnap </h1>
             </a>
             <div class="flex items-center space-x-6">
-                <a href="/" class="text-white">🏠️ Home</a>
+                <a v-if="!is_logged_in" href="/" class="text-white">🏠️ Home</a>
+                <a v-if="is_logged_in" href="/snaps" class="text-white">📸 Snaps</a>
                 <a href="#" class="text-white" @click="show_credit = true">🌟 Credits</a>
                 <a href="/docs" class="text-white">📚 Docs</a>
                 <a href="https://www.buymeacoffee.com/akii09" class="text-white">☕ Buy me a coffee</a>

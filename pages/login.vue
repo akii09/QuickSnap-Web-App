@@ -1,6 +1,6 @@
 <template>
     <div class="bg-gray-900 min-h-screen flex items-center justify-center">
-        <div class="bg-gray-800 p-8 rounded-lg shadow-md w-full sm:w-96">
+        <div v-loading="is_loading" class="bg-gray-800 p-8 rounded-lg shadow-md w-full sm:w-96">
             <h1 class="text-2xl font-semibold text-white mb-4">Login</h1>
             <input v-model="token" required class="bg-gray-700 text-white px-4 py-2 w-full rounded-md mb-4"
                 placeholder="Enter Token" />
@@ -33,20 +33,29 @@ export default {
         return {
             token: '',
             client_id: '592d7cf9cad8076',
-            show_info: false
+            show_info: false,
+            is_loading: false
+        }
+    },
+    created() {
+        if(nuxtStorage.localStorage.getData('qs_token')){
+            window.location.href = '/snaps';
         }
     },
     methods: {
         saveQsToken() {
             if (this.token) {
+                this.is_loading = true;
                 validateToken(this.token, this.client_id)
                     .then(isAvailable => {
                         if (isAvailable) {
+                            this.is_loading = false;
                             // Store the token in localStorage with an expiration time of 72 hours
                             nuxtStorage.localStorage.setData('qs_token', this.token, 72, 'h');
                             // Redirect to dashboard and fetch images
                             this.$router.push({ path: '/snaps' });
                         } else {
+                            this.is_loading = false;
                             ElMessage({
                                 type: 'error',
                                 message: 'Please enter valid token',
@@ -55,6 +64,7 @@ export default {
                         }
                     });
             } else {
+                this.is_loading = false;
                 ElMessage({
                     type: 'error',
                     message: 'Please enter token',
@@ -96,6 +106,9 @@ export default {
 .qs-info-dialog{
     height: 60vh;
     overflow-y: scroll;
+}
+.el-loading-mask {
+  background:  #11182777;
 }
 </style>
   
