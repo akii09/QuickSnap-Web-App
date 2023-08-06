@@ -148,9 +148,9 @@ export default {
 </script>
 
 <template>
+  <Header />
   <div class="container mx-auto">
     <div v-if="show_dashboard" class="px-4 py-6">
-      <Header />
       <div v-if="images.length" class="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 ">
         <div v-for="(image, img_index) in images" :key="image.id" class="dark:bg-slate-800 p-4 rounded-lg shadow-md">
           <div class="demo-image__preview">
