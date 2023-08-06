@@ -1,6 +1,7 @@
 
 
 <script>
+import nuxtStorage from 'nuxt-storage';
 export default {
     data() {
         return {
@@ -10,7 +11,18 @@ export default {
     methods: {
         handleClose() {
             this.show_credit = false;
-        }
+        },
+        logoutApp() {
+            if (confirm("Are you sure you want to log out?")) {
+                nuxtStorage.localStorage.removeItem('qs_token'); // Assuming nuxtStorage is globally available
+                this.$router.push({ path: '/login' }); // Assuming you're using Vue Router
+            } else {
+                ElMessage({
+                    type: 'info',
+                    message: 'Logout canceled. 😅',
+                });
+            }
+        },
     },
 }
 </script>
@@ -25,19 +37,21 @@ export default {
         <div class="flex items-center space-x-6">
             <a href="#" class="text-white" @click="show_credit = true">🌟 Credits</a>
             <a href="#" class="text-white">📚 Docs</a>
-            <a href="#" class="text-white">☕ Buy me coffee</a>
+            <a href="#" class="text-white">☕ Buy me a coffee</a>
             <a href="#">
-                <svg viewBox="0 0 1024 1024" style="width: 25px; color: #a09f9f;" xmlns="http://www.w3.org/2000/svg"
-                    data-v-ea893728="">
+                <svg @click="logoutApp()" style="width: 25px; color: #a09f9f;" viewBox="0 0 1024 1024"
+                    xmlns="http://www.w3.org/2000/svg" data-v-ea893728="">
                     <path fill="currentColor"
-                        d="M628.736 528.896A416 416 0 0 1 928 928H96a415.872 415.872 0 0 1 299.264-399.104L512 704l116.736-175.104zM720 304a208 208 0 1 1-416 0 208 208 0 0 1 416 0z">
+                        d="M352 159.872V230.4a352 352 0 1 0 320 0v-70.528A416.128 416.128 0 0 1 512 960a416 416 0 0 1-160-800.128z">
                     </path>
+                    <path fill="currentColor" d="M512 64q32 0 32 32v320q0 32-32 32t-32-32V96q0-32 32-32z"></path>
                 </svg>
             </a>
         </div>
         <!-- Image dialog -->
         <client-only>
-            <el-dialog v-model="show_credit" customClass="qs-dark-theme" :title="'🙌  With Immense Gratitude To:'" width="35%" :before-close="handleClose">
+            <el-dialog v-model="show_credit" customClass="qs-dark-theme" :title="'🙌  With Immense Gratitude To:'"
+                width="35%" :before-close="handleClose">
                 <div class="bg-gray-900 text-white">
                     <!-- <p class="text-2xl mb-4">🙌 With Immense Gratitude To:</p> -->
                     <ul class="list-disc ml-6 space-y-2">
@@ -74,8 +88,8 @@ export default {
                 </div>
             </el-dialog>
         </client-only>
-    <!-- Image dialog -->
-</div>
+        <!-- Image dialog -->
+    </div>
 </template>
 
 <style lang="scss" scoped></style>

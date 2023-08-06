@@ -9,92 +9,7 @@ export default {
     return {
       show_dashboard: true,
       client_id: '592d7cf9cad8076',
-      images: [
-        {
-          "id": "MVMqBuY",
-          "title": null,
-          "description": null,
-          "datetime": 1691238588,
-          "type": "image/png",
-          "animated": false,
-          "width": 1920,
-          "height": 976,
-          "size": 644734,
-          "views": 1,
-          "bandwidth": 644734,
-          "vote": null,
-          "favorite": false,
-          "nsfw": null,
-          "section": null,
-          "account_url": null,
-          "account_id": null,
-          "is_ad": false,
-          "in_most_viral": false,
-          "has_sound": false,
-          "tags": [],
-          "ad_type": 0,
-          "ad_url": "",
-          "edited": "0",
-          "in_gallery": false,
-          "link": "https://i.imgur.com/MVMqBuY.png"
-        },
-        {
-          "id": "CxtjaXX",
-          "title": null,
-          "description": null,
-          "datetime": 1691264324,
-          "type": "image/png",
-          "animated": false,
-          "width": 1920,
-          "height": 976,
-          "size": 416343,
-          "views": 0,
-          "bandwidth": 0,
-          "vote": null,
-          "favorite": false,
-          "nsfw": null,
-          "section": null,
-          "account_url": null,
-          "account_id": null,
-          "is_ad": false,
-          "in_most_viral": false,
-          "has_sound": false,
-          "tags": [],
-          "ad_type": 0,
-          "ad_url": "",
-          "edited": "0",
-          "in_gallery": false,
-          "link": "https://i.imgur.com/CxtjaXX.png"
-        },
-        {
-          "id": "T74yv2F",
-          "title": null,
-          "description": null,
-          "datetime": 1691265831,
-          "type": "image/png",
-          "animated": false,
-          "width": 1920,
-          "height": 976,
-          "size": 383283,
-          "views": 1,
-          "bandwidth": 383283,
-          "vote": null,
-          "favorite": false,
-          "nsfw": null,
-          "section": null,
-          "account_url": null,
-          "account_id": null,
-          "is_ad": false,
-          "in_most_viral": false,
-          "has_sound": false,
-          "tags": [],
-          "ad_type": 0,
-          "ad_url": "",
-          "edited": "0",
-          "in_gallery": false,
-          "link": "https://i.imgur.com/T74yv2F.png"
-        }
-      ],
+      images: [],
       imgur_server_issue: false,
       popup_image: '',
       all_images: [],
@@ -127,7 +42,6 @@ export default {
       const albumHash = nuxtStorage.localStorage.getData('qs_token');
       const apiUrl = `https://api.imgur.com/3/album/${albumHash}/images`;
       const clientId = this.client_id;
-      // this.show_dashboard = false;
       // First validate albums
       validateToken(albumHash, clientId)
         .then(isAvailable => {
@@ -138,7 +52,8 @@ export default {
               }
             })
               .then(response => {
-                this.show_dashboard = false;
+                this.images = response.data.data;
+                this.show_dashboard = true;
                 console.log(response.data); // Do something with the response data
               })
               .catch(error => {
@@ -149,7 +64,7 @@ export default {
           }
         });
     },
-    deleteImage() {
+    deleteImage(imageDeleteHash) {
       ElMessageBox.alert(
         'Are you sure you want to 🗑️ delete this image permanently?',
         'Delete Image',
@@ -163,10 +78,7 @@ export default {
           customClass: 'qs-dark-theme',
           callback: (action) => {
             if (action === 'confirm') {
-              ElMessage({
-                type: 'success',
-                message: 'Image successfully deleted! 🎉',
-              });
+              this.processDeleteImage(imageDeleteHash);
               // Perform your deletion logic here
             } else {
               ElMessage({
@@ -177,6 +89,30 @@ export default {
           },
         }
       );
+    },
+    processDeleteImage(imageDeleteHash) {
+      const apiUrl = `https://api.imgur.com/3/image/${imageDeleteHash}`;
+      const clientId = this.client_id;
+      axios.delete(apiUrl, {
+        headers: {
+          'Authorization': `Client-ID ${clientId}`
+        }
+      })
+        .then(response => {
+          if (response.status === 200) {
+            ElMessage({
+              type: 'success',
+              message: 'Image successfully deleted! 🎉',
+            });
+            console.log('Image deleted successfully.');
+            this.getImagesFromServer();
+          } else {
+            console.error('Failed to delete image.');
+          }
+        })
+        .catch(error => {
+          console.error('Error deleting image:', error.message);
+        });
     },
     openImage(img) {
       console.log(img)
@@ -232,7 +168,7 @@ export default {
               </path>
             </svg>
             <!-- <svg viewBox="0 0 1024 1024" class="cursor-pointer mx-1" style="width: 25px; color: #ec5e5e;" xmlns="http://www.w3.org/2000/svg" data-v-ea893728=""><path fill="currentColor" d="M512 160c320 0 512 352 512 352S832 864 512 864 0 512 0 512s192-352 512-352zm0 64c-225.28 0-384.128 208.064-436.8 288 52.608 79.872 211.456 288 436.8 288 225.28 0 384.128-208.064 436.8-288-52.608-79.872-211.456-288-436.8-288zm0 64a224 224 0 1 1 0 448 224 224 0 0 1 0-448zm0 64a160.192 160.192 0 0 0-160 160c0 88.192 71.744 160 160 160s160-71.808 160-160-71.744-160-160-160z"></path></svg> -->
-            <svg viewBox="0 0 1024 1024" class="cursor-pointer mx-1" style="width: 25px; color: #a09f9f;"
+            <!-- <svg viewBox="0 0 1024 1024" class="cursor-pointer mx-1" style="width: 25px; color: #a09f9f;"
               xmlns="http://www.w3.org/2000/svg" data-v-ea893728="">
               <path fill="currentColor"
                 d="M832 512a32 32 0 1 1 64 0v352a32 32 0 0 1-32 32H160a32 32 0 0 1-32-32V160a32 32 0 0 1 32-32h352a32 32 0 0 1 0 64H192v640h640V512z">
@@ -240,7 +176,7 @@ export default {
               <path fill="currentColor"
                 d="m469.952 554.24 52.8-7.552L847.104 222.4a32 32 0 1 0-45.248-45.248L477.44 501.44l-7.552 52.8zm422.4-422.4a96 96 0 0 1 0 135.808l-331.84 331.84a32 32 0 0 1-18.112 9.088L436.8 623.68a32 32 0 0 1-36.224-36.224l15.104-105.6a32 32 0 0 1 9.024-18.112l331.904-331.84a96 96 0 0 1 135.744 0z">
               </path>
-            </svg>
+            </svg> -->
             <svg @click="deleteImage(image.id)" class="cursor-pointer mx-1" style="width: 25px; color: #d87c7c;"
               viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" data-v-ea893728="">
               <path fill="currentColor"
@@ -279,19 +215,22 @@ export default {
   background-color: #111827;
 }
 
-.qs-dark-theme .el-notification__title{
+.qs-dark-theme .el-notification__title {
   color: #fff !important;
 }
-.qs-dark-theme .el-message-box__title{
+
+.qs-dark-theme .el-message-box__title {
   color: #fff !important;
 }
 
 .qs-dark-theme .el-notification__content p {
   color: #fff !important;
 }
+
 .qs-dark-theme .el-message-box__message p {
   color: #fff !important;
 }
+
 .qs-dark-theme .el-dialog__title {
   color: #fff !important;
 }
