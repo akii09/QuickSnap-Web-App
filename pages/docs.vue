@@ -44,9 +44,9 @@
                 <ol class="list-decimal ml-6 space-y-2">
                     <li>Access your personalized dashboard on the QuickSnap Web App.</li>
                     <li>Browse, categorize, and organize your captured screenshots.</li>
-                    <li>Use powerful search and filtering options to find specific screenshots quickly.</li>
-                    <li>Enhance screenshots with annotations, notes, and comments.</li>
-                    <li>Effortlessly share and download screenshots for collaboration.</li>
+                    <li>Use powerful search and filtering options to find specific screenshots quickly.  <span class="text-gray-400"> &nbsp; - upcoming feature</span></li>
+                    <li>Enhance screenshots with annotations, notes, and comments. <span class="text-gray-400"> &nbsp; - upcoming feature</span></li>
+                    <li>Effortlessly share and download screenshots for collaboration. <span class="text-gray-400"> &nbsp; - upcoming feature</span></li>
                 </ol>
                 <p class="my-2">Experience the convenience of managing your visual content with the QuickSnap Web App.</p>
             </section>
