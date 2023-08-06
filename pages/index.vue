@@ -1,6 +1,7 @@
+
 <template>
-    <div>
-       <Dashboard/>
-    </div>
-  </template>
+   <div>
+      <Dashboard />
+   </div>
+</template>
   
