@@ -14,7 +14,8 @@ export default {
       popup_image: '',
       all_images: [],
       show_image: false,
-      is_loading: false
+      is_loading: false,
+      imageDeleteHash: null
     }
   },
   created() {
@@ -68,7 +69,7 @@ export default {
           }
         });
     },
-    deleteImage(imageDeleteHash) {
+    deleteImage(imageHash) {
       ElMessageBox.alert(
         'Are you sure you want to 🗑️ delete this image permanently?',
         'Delete Image',
@@ -82,7 +83,7 @@ export default {
           customClass: 'qs-dark-theme',
           callback: (action) => {
             if (action === 'confirm') {
-              this.processDeleteImage(imageDeleteHash);
+              this.getImageDetails(imageHash);
               // Perform your deletion logic here
             } else {
               ElMessage({
@@ -116,6 +117,25 @@ export default {
         })
         .catch(error => {
           console.error('Error deleting image:', error.message);
+        });
+    },
+    getImageDetails(imageHash) {
+      const apiUrl = `https://api.imgur.com/3/image/${imageHash}`;
+      const clientId = this.client_id;
+      axios.get(apiUrl, {
+        headers: {
+          'Authorization': `Client-ID ${clientId}`
+        }
+      })
+        .then(response => {
+          if (response.status === 200) {
+            this.processDeleteImage(response.data.data.deletehash)
+          } else {
+            console.error('Failed to get image details.');
+          }
+        })
+        .catch(error => {
+          console.error('Something went wrong:', error.message);
         });
     },
     openImage(img) {
@@ -182,6 +202,16 @@ export default {
                 d="m469.952 554.24 52.8-7.552L847.104 222.4a32 32 0 1 0-45.248-45.248L477.44 501.44l-7.552 52.8zm422.4-422.4a96 96 0 0 1 0 135.808l-331.84 331.84a32 32 0 0 1-18.112 9.088L436.8 623.68a32 32 0 0 1-36.224-36.224l15.104-105.6a32 32 0 0 1 9.024-18.112l331.904-331.84a96 96 0 0 1 135.744 0z">
               </path>
             </svg> -->
+              <span>
+                <svg viewBox="0 0 1024 1024" class="cursor-pointer mx-1" style="width: 25px; color: #a09f9f;"
+                  xmlns="http://www.w3.org/2000/svg" data-v-ea893728="">
+                  <path fill="currentColor"
+                    d="M512 160c320 0 512 352 512 352S832 864 512 864 0 512 0 512s192-352 512-352zm0 64c-225.28 0-384.128 208.064-436.8 288 52.608 79.872 211.456 288 436.8 288 225.28 0 384.128-208.064 436.8-288-52.608-79.872-211.456-288-436.8-288zm0 64a224 224 0 1 1 0 448 224 224 0 0 1 0-448zm0 64a160.192 160.192 0 0 0-160 160c0 88.192 71.744 160 160 160s160-71.808 160-160-71.744-160-160-160z">
+                  </path>
+                </svg>
+                <span class="font-sm mr-1" style="color: #a09f9f;">{{ image.views }}</span>
+              </span>
+
               <svg @click="deleteImage(image.id)" class="cursor-pointer mx-1" style="width: 25px; color: #d87c7c;"
                 viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" data-v-ea893728="">
                 <path fill="currentColor"
@@ -241,5 +271,4 @@ export default {
 
 .qs-dark-theme .el-dialog__title {
   color: #fff !important;
-}
-</style>
+}</style>
