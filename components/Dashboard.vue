@@ -30,10 +30,10 @@ export default {
         // Store the token in localStorage with an expiration time of 72 hours
         nuxtStorage.localStorage.setData('qs_token', qsToken, 72, 'h');
         // Redirect to dashboard and fetch images
-        this.$router.push({ path: '/' });
+        this.$router.push({ path: '/snaps' });
         this.getImagesFromServer();
       } else if (nuxtStorage.localStorage.getData('qs_token')) {
-        this.$router.push({ path: '/' });
+        this.$router.push({ path: '/snaps' });
         this.getImagesFromServer();
       } else {
         this.$router.push({ path: '/login' });

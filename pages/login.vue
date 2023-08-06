@@ -45,7 +45,7 @@ export default {
                             // Store the token in localStorage with an expiration time of 72 hours
                             nuxtStorage.localStorage.setData('qs_token', this.token, 72, 'h');
                             // Redirect to dashboard and fetch images
-                            this.$router.push({ path: '/' });
+                            this.$router.push({ path: '/snaps' });
                         } else {
                             ElMessage({
                                 type: 'error',
